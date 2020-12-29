@@ -1,6 +1,6 @@
 package exercises;
 
-import java.util.Arrays;
+import java.util.Stack;
 
 public class question01 {
     public static void main(String[] args){
@@ -17,34 +17,30 @@ public class question01 {
 class Solution {
     public int solution(int[][] board, int[] moves) {
         int answer = 0;
-        int[] basket = new int[board.length * board[0].length];
+        Stack<Integer> basket = new Stack<>();
         
         for(int move :moves){
         	int moveCrain = move-1;
         	
-            for(int idx=0 ; idx<board[0].length ; idx++){ // 0~4 5회 반복
+            for(int idx=0 ; idx < board.length ; idx++){
                 int boardVal = board[idx][moveCrain];
+                if(boardVal == 0) continue;
                 
-                if(boardVal != 0){
-                	board[idx][moveCrain] = 0;	// pop doll
-                    basket[answer] = boardVal;
-                    answer += countRemoveDolls(basket);
-                    
-                    break;
-                }
+            	if(!basket.isEmpty() && basket.peek() == boardVal) {
+            		basket.pop();
+            		answer++;
+            	}else{
+            		basket.push(boardVal);
+            	}
+            	
+            	board[idx][moveCrain] = 0;	// pop doll
+                break;
+               
             }// end inner-loop
         }// end outer-loop
-        
+
         return answer*2;
     }
     
-    private int countRemoveDolls(int[] basket){
-        int removeDollCnt = 0;
-        
-        // 배열 검색 로직 추가 
-        System.out.println(Arrays.toString(basket));
-        removeDollCnt++;	// 동일 값이 있을때 ++  
-        
-        return removeDollCnt;
-    }
+    
 }
